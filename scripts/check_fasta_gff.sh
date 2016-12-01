@@ -8,17 +8,19 @@ source "/Users/Thibaut/.bash_bioinfo"
 ############
 
 function USAGE() {
-	printf "Usage:\n %s -f FASTA_FILE -g GFF_FILE -o OUTDIR [-c] [-v] [-h]\n\n" $( basename ${0} )
+	printf "Usage:\n\t%s -f FASTA_FILE -g GFF_FILE -o OUTDIR [-m MIN_SEQ_LENGTH] [-c] [-v]\n" $( basename ${0} )
+	printf "\t%s -h\n\n" $( basename ${0} )
 	echo -e "Required arguments :"
-	echo -e " -f file.fasta"
-	echo -e " -g file.gff"
-	echo -e " -o output directory"
+	echo -e "\t-f file.fasta"
+	echo -e "\t-g file.gff"
+	echo -e "\t-o output directory"
 	echo
 	echo -e "Options :"
-	echo -e " -m minimum sequence length"
-	echo -e " -c if files are compressed (gzip)"
-	echo -e " -v to activate verbose mode"
-	echo -e " -h to print this help"
+	echo -e "\t-m minimum sequence length        [by default : 1]"
+	echo -e "\t-c if files are compressed (gzip) [by default : not compressed]"
+	echo -e "\t-v to activate verbose mode       [by default : not activated]"
+	echo -e "Help :"
+	echo -e "\t-h to print this help"
 	echo
 	exit ${1:-0}
 }
