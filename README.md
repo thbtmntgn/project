@@ -1,6 +1,5 @@
 # README
 
-
 ## check_fasta_gff.sh
 
 Usage:
@@ -18,3 +17,8 @@ Options :
 	-v to activate verbose mode       [by default : not activated]
 Help :
 	-h to print this help
+
+Dependencies :
+	-
+
+## check_fasta_gff.pl
