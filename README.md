@@ -1,16 +1,23 @@
 # README
 
-## .bash_bioinfo
+## Intall
+
+1) `git clone https://github.com/thbtmntgn/project`
+2) `cd projet/sources/`
+3) Use script(s)
+	- `bash check_fasta_gff.sh` for example
+
+### .bash_bioinfo
 
 A file containing bioinformatic shell aliases and functions
 
 Available here : https://github.com/thbtmntgn/bash_bioinfo
 
-### Dependencies
+#### Dependencies
 
 - _samtools_
 
-## Script 1 : check_fasta_gff.sh
+### Script 1 : check_fasta_gff.sh
 
 Check concordance between a FASTA file and its affiliated GFF file :
 - compare sequence IDs
@@ -27,7 +34,7 @@ Output files (optional files between []):
 - [a file containing the sequence IDs present in FASTA file only]
 - [a file containing the sequence IDs present in GFF file only]
 
-### Usage
+#### Usage
 
 Usage:
 - `check_fasta_gff.sh -f FASTA_FILE -g GFF_FILE -o OUTDIR [-m MIN_SEQ_LENGTH] [-c] [-v]`
@@ -46,13 +53,13 @@ Options :
 Help :
 - **-h** to print this help
 
-### Dependencies :
+#### Dependencies :
 	- .bash_bioinfo (from https://github.com/thbtmntgn/bash_bioinfo) [no installation needed, handled in the script]
 	- check_fasta_gff.pl
 
-## Script 2 : check_fasta_gff.pl
+### Script 2 : check_fasta_gff.pl
 
-### Usage
+#### Usage
 
 Usage :
 - `check_fasta_gff.pl -d DESCRIPTION_FASTA_FILE -g GFF_FILE -o OUTDIR [-v]`
@@ -67,7 +74,7 @@ Options :
 - **-v** | **--verbose**     : activate verbose mode
 - **-h** | **--help**        : print this help
 
-### Dependencies
+#### Dependencies
 
 Perl packages :
 - _Getopt::Long_
