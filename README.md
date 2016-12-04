@@ -8,11 +8,11 @@ Available here : https://github.com/thbtmntgn/bash_bioinfo
 
 ### Dependencies
 
-- samtools
+- _samtools_
 
 ## Script 1 : check_fasta_gff.sh
 
-Check concordance between a fasta file and its affiliated GFF file :
+Check concordance between a FASTA file and its affiliated GFF file :
 - compare sequence IDs
 - compare sequence lengths (FASTA vs. GFF)
 - compare sequence lengths (minimal sequence length)
@@ -29,9 +29,9 @@ Output files (optional files between []):
 
 ### Usage
 
-Usage:
-- check_fasta_gff.sh -f FASTA_FILE -g GFF_FILE -o OUTDIR [-m MIN_SEQ_LENGTH] [-c] [-v]
-- check_fasta_gff.sh -h
+`Usage:
+	check_fasta_gff.sh -f FASTA_FILE -g GFF_FILE -o OUTDIR [-m MIN_SEQ_LENGTH] [-c] [-v]
+	check_fasta_gff.sh -h`
 
 Required arguments :
 - -f file.fasta
@@ -54,11 +54,11 @@ Help :
 
 ### Usage
 
-Usage :
-- check_fasta_gff.pl -d DESCRIPTION_FASTA_FILE -g GFF_FILE -o OUTDIR [-v]
-- check_fasta_gff.pl --description DESCRIPTION_FASTA_FILE --gff GFF_FILE --outdir OUTDIR [--verbose]
-- check_fasta_gff.pl -h
-- check_fasta_gff.pl --help
+`Usage :
+check_fasta_gff.pl -d DESCRIPTION_FASTA_FILE -g GFF_FILE -o OUTDIR [-v]
+	check_fasta_gff.pl --description DESCRIPTION_FASTA_FILE --gff GFF_FILE --outdir OUTDIR [--verbose]
+	check_fasta_gff.pl -h
+	check_fasta_gff.pl --help`
 
 Options :
 - -d | --description : description FASTA file (seqid + seqlength)
