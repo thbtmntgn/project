@@ -34,17 +34,17 @@ Usage:
 - `check_fasta_gff.sh -h`
 
 Required arguments :
-- -f file.fasta
-- -g file.gff
-- -o output directory
+- **-f** file.fasta
+- **-g** file.gff
+- **-o** output directory
 
 Options :
-- -m minimum sequence length        [by default : 1]
-- -c if files are compressed (gzip) [by default : not compressed]
-- -v to activate verbose mode       [by default : not activated]
+- **-m** minimum sequence length        [by default : 1]
+- **-c** if files are compressed (gzip) [by default : not compressed]
+- **-v** to activate verbose mode       [by default : not activated]
 
 Help :
-- -h to print this help
+- **-h** to print this help
 
 ### Dependencies :
 	- .bash_bioinfo (from https://github.com/thbtmntgn/bash_bioinfo) [no installation needed, handled in the script]
@@ -61,11 +61,11 @@ Usage :
 - `check_fasta_gff.pl --help`
 
 Options :
-- -d | --description : description FASTA file (seqid + seqlength)
-- -g | --gff         : GFF file
-- -o | --outdir      : output directory
-- -v | --verbose     : activate verbose mode
-- -h | --help        : print this help
+- **-d** | **--description** : description FASTA file (seqid + seqlength)
+- **-g** | **--gff**         : GFF file
+- **-o** | **--outdir**      : output directory
+- **-v** | **--verbose**     : activate verbose mode
+- **-h** | **--help**        : print this help
 
 ### Dependencies
 
