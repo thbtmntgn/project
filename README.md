@@ -2,7 +2,7 @@
 
 ## Intall
 
-1. `git clone https://github.com/thbtmntgn/project`
+1. `git clone [https://github.com/thbtmntgn/project](https://github.com/thbtmntgn/project)`
 2. `cd projet/sources/`
 3. Use script(s)
 	- `bash check_fasta_gff.sh` for example
@@ -43,7 +43,7 @@ Options :
 Help :
 - **-h** to print this help
 
-#### Dependencies :
+#### Dependencies
 	- .bash_bioinfo [sourced within the script BUT see dependencies below !]
 	- check_fasta_gff.pl
 
@@ -74,7 +74,7 @@ Perl packages :
 
 A file containing bioinformatic shell aliases and functions
 
-Available here : https://github.com/thbtmntgn/bash_bioinfo
+Available here : [https://github.com/thbtmntgn/bash_bioinfo](https://github.com/thbtmntgn/bash_bioinfo)
 
 #### Dependencies
 
