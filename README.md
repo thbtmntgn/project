@@ -2,7 +2,8 @@
 
 ## .bash_bioinfo
 
-A file containing bioinformatic shell aliases and functions.
+A file containing bioinformatic shell aliases and functions
+Available here : https://github.com/thbtmntgn/bash_bioinfo
 
 ### Dependencies
 
