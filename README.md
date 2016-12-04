@@ -12,6 +12,21 @@ Available here : https://github.com/thbtmntgn/bash_bioinfo
 
 ## Script 1 : check_fasta_gff.sh
 
+Check concordance between a fasta file and its affiliated GFF file :
+- compare sequence IDs
+- compare sequence lengths (FASTA vs. GFF)
+- compare sequence lengths (minimal sequence length)
+
+Output files (optional files between []):
+- a corrected FASTA file
+- a corrected GFF file
+- a file containing sequence IDS from corrected FASTA and GFF file
+- [a file containing the concordant sequence IDs (same length in FASTA and GFF)]
+- [a file containing the discordant sequence IDs (different length in FASTA and GFF)]
+- [a file containing the 'lower than minimal sequence length' concordant sequence IDs]
+- [a file containing the sequence IDs present in FASTA file only]
+- [a file containing the sequence IDs present in GFF file only]
+
 ### Usage
 
 Usage:
