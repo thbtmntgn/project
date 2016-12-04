@@ -7,16 +7,6 @@
 3. Use script(s)
 	- `bash check_fasta_gff.sh` for example
 
-### .bash_bioinfo
-
-A file containing bioinformatic shell aliases and functions
-
-Available here : https://github.com/thbtmntgn/bash_bioinfo
-
-#### Dependencies
-
-- _samtools_
-
 ### Script 1 : check_fasta_gff.sh
 
 Check concordance between a FASTA file and its affiliated GFF file :
@@ -80,3 +70,13 @@ Perl packages :
 - _Getopt::Long_
 - _List::Util qw[min max]_
 - _List::Compare_
+
+### .bash_bioinfo
+
+A file containing bioinformatic shell aliases and functions
+
+Available here : https://github.com/thbtmntgn/bash_bioinfo
+
+#### Dependencies
+
+- _samtools_
