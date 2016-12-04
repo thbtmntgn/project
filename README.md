@@ -2,9 +2,9 @@
 
 ## Intall
 
-1) `git clone https://github.com/thbtmntgn/project`
-2) `cd projet/sources/`
-3) Use script(s)
+1. `git clone https://github.com/thbtmntgn/project`
+2. `cd projet/sources/`
+3. Use script(s)
 	- `bash check_fasta_gff.sh` for example
 
 ### .bash_bioinfo
