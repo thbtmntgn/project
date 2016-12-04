@@ -179,12 +179,19 @@ eval ${CMD}
 
 # If good common seqids are retrieved, sort them by sequence length from FASTA (longest to smallest)
 if [[ -e "${OUTDIR}/seqids_in_common_concordant.desc" ]] ; then
+
 	CMD="cat ${OUTDIR}/seqids_in_common_concordant.desc | sort -nr -k2 > ${OUTDIR}/seqids_in_common_concordant_sorted.desc"
 	if [[ ${VERBOSE} == "YES" ]] ; then
 		echo -e "[VERBOSE MODE]---> If common seqids (with concordant length between FASTA and GFF) are retrieved, they are sorted by FASTA sequence length (longest to smallest)"
 		echo -e "\t---> Commande : ${CMD}\n"
 	fi
 	eval ${CMD}
+
+else
+
+	echo -e "Problem : none common seqids !"
+	exit 1
+
 fi
 
 ################################################################################
@@ -197,6 +204,8 @@ if [[ ${VERBOSE} == "YES" ]] ; then
 fi
 eval ${CMD}
 
+################################################################################
+
 # Get too short SEQIDS
 CMD="cat ${OUTDIR}/seqids_in_common_concordant_sorted.desc | awk '{ if (\$2 < ${MIN_LENGTH}){ print \$0 } }' > ${OUTDIR}/seqids_in_common_concordant_too_short.desc"
 if [[ ${VERBOSE} == "YES" ]] ; then
@@ -205,6 +214,8 @@ if [[ ${VERBOSE} == "YES" ]] ; then
 fi
 eval ${CMD}
 
+################################################################################
+
 SEQIDS_COMMON_NUM=$( cat ${OUTDIR}/seqids_in_common_concordant_sorted.desc | wc -l | awk '{print $1}' )
 SEQIDS_TOO_SHORT_NUM=$( cut -f1 ${OUTDIR}/seqids_in_common_concordant_too_short.desc | wc -l | awk '{print $1}' )
 SEQIDS_FILTERED_NUM=$( cut -f1 ${OUTDIR}/filtered_seqids.desc | wc -l | awk '{print $1}' )
@@ -212,9 +223,13 @@ echo -e "---> Concordant seqids           : ${SEQIDS_COMMON_NUM}"
 echo -e "---> Concordant seqids too short : ${SEQIDS_TOO_SHORT_NUM}"
 echo -e "---> Keeped seqids               : ${SEQIDS_FILTERED_NUM}\n"
 
+################################################################################
+
 if [[ ${SEQIDS_TOO_SHORT_NUM} -eq 0 ]] ; then
 	rm ${OUTDIR}/seqids_in_common_concordant_too_short.desc
 fi
+
+################################################################################
 
 # Index FASTA file
 CMD="samtools faidx ${FASTA}"
@@ -224,6 +239,8 @@ if [[ ${VERBOSE} == "YES" ]] ; then
 fi
 eval ${CMD}
 
+################################################################################
+
 # Get only seqid field
 CMD="cut -f1 ${OUTDIR}/filtered_seqids.desc > ${OUTDIR}/filtered_seqids.list"
 if [[ ${VERBOSE} == "YES" ]] ; then
@@ -231,6 +248,8 @@ if [[ ${VERBOSE} == "YES" ]] ; then
 	echo -e "\t---> Commande : ${CMD}\n"
 fi
 eval ${CMD}
+
+################################################################################
 
 # Get FASTA sequences with seqids in LIST
 CMD="xargs samtools faidx ${FASTA} < ${OUTDIR}/filtered_seqids.list > ${OUTDIR}/filtered_${FASTA_NAME}.${FASTA_EXTENSION}"
@@ -274,8 +293,8 @@ fi
 rm ${FASTA}
 rm ${GFF}
 rm ${FASTA}.fai
-rm ${OUTDIR}/filtered_seqids.desc
 rm ${OUTDIR}/seqids_in_common_concordant_sorted.desc
+rm ${OUTDIR}/filtered_seqids.list
 rm ${OUTDIR}/${FASTA_NAME}.desc
 
 ##############
