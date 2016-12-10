@@ -6,21 +6,35 @@ set -u
 ############
 
 function USAGE() {
+
+	echo -e "\n############################\n# BEGIN $( basename ${0} ) #\n############################\n"
+
 	printf "Usage:\n\t%s -f FASTA_FILE -g GFF_FILE -o OUTDIR [-m MIN_SEQ_LENGTH] [-c] [-v]\n" $( basename ${0} )
-	printf "\t%s -h\n\n" $( basename ${0} )
-	echo -e "Required arguments :"
-	echo -e "\t-f file.fasta"
-	echo -e "\t-g file.gff"
-	echo -e "\t-o output directory"
-	echo
-	echo -e "Options :"
-	echo -e "\t-m minimum sequence length        [by default : 1]"
-	echo -e "\t-c if files are compressed (gzip) [by default : not compressed]"
-	echo -e "\t-v to activate verbose mode       [by default : not activated]"
-	echo -e "Help :"
-	echo -e "\t-h to print this help"
-	echo
+	printf "\t%s [-h]\n\n" $( basename ${0} )
+
+	cat <<EOF
+
+	Required options:
+		-f : FASTA file
+		-g : GFF file
+		-o : output directory
+
+	Optionnal options:
+		-m : minimum sequence length        [by default : 1]"
+		-c : if files are compressed (gzip) [by default : not compressed]"
+
+	Help:
+		-v : to activate verbose mode       [by default : not activated]"
+		-h : to print this help
+
+Description:
+
+EOF
+
+	echo -e "\n######################################\n# END $( basename ${0} ) #\n######################################\n"
+
 	exit ${1:-0}
+
 }
 
 #####################
@@ -83,14 +97,6 @@ do
 	esac
 done
 
-################
-# BEGIN SCRIPT #
-################
-
-echo -e "\n############################\n# BEGIN $( basename ${0} ) #\n############################\n"
-
-################################################################################
-
 #################
 # VERIFICATIONS #
 #################
@@ -100,6 +106,14 @@ if [[ ${FASTA_PATH} == "NOTDEFINED" || ${GFF_PATH} == "NOTDEFINED" || ${OUTDIR} 
 	USAGE
 	exit 1
 fi
+
+################
+# BEGIN SCRIPT #
+################
+
+echo -e "\n############################\n# BEGIN $( basename ${0} ) #\n############################\n"
+
+################################################################################
 
 # Check file compression
 if [[ ${COMPRESSED} == "YES" ]] ; then
@@ -118,26 +132,24 @@ fi
 
 ################################################################################
 
+# If bash_bioinfo already cloned : remove it and clone it again to get the most recent one from Github
 if [[ -d "bash_bioinfo" ]] ; then
-	CMD="source 'bash_bioinfo/.bash_bioinfo'"
-	if [[ ${VERBOSE} == "YES" ]] ; then
-		echo -e "[VERBOSE MODE]---> Source .bash_bioinfo"
-		echo -e "\t---> Commande : ${CMD}\n"
-	fi
-	eval ${CMD}
+	CMD1="rm -rf bash_bioinfo/"
+	CMD3="source 'bash_bioinfo/.bash_bioinfo'"
+	CMD2="git clone 'https://github.com/thbtmntgn/bash_bioinfo'"
+	if [[ ${VERBOSE} == "YES" ]] ; then echo -e "[VERBOSE MODE]---> Remove bash_bioinfo/ directory\n\t---> Commande : ${CMD1}\n" ; fi
+	eval ${CMD1}
+	if [[ ${VERBOSE} == "YES" ]] ; then echo -e "[VERBOSE MODE]---> Get .bash_bioinfo from Github\n\t---> Commande : ${CMD2}\n" ; fi
+	eval ${CMD2}
+	if [[ ${VERBOSE} == "YES" ]] ; then echo -e "[VERBOSE MODE]---> Source .bash_bioinfo\n\t---> Commande : ${CMD3}\n" ; fi
+	eval ${CMD3}
 else
-	CMD="git clone 'https://github.com/thbtmntgn/bash_bioinfo'"
-	if [[ ${VERBOSE} == "YES" ]] ; then
-		echo -e "[VERBOSE MODE]---> Get .bash_bioinfo from Github"
-		echo -e "\t---> Commande : ${CMD}\n"
-	fi
-	eval ${CMD}
-	CMD="source 'bash_bioinfo/.bash_bioinfo'"
-	if [[ ${VERBOSE} == "YES" ]] ; then
-		echo -e "[VERBOSE MODE]---> Source .bash_bioinfo"
-		echo -e "\t---> Commande : ${CMD}\n"
-	fi
-	eval ${CMD}
+	CMD1="git clone 'https://github.com/thbtmntgn/bash_bioinfo'"
+	CMD2="source 'bash_bioinfo/.bash_bioinfo'"
+	if [[ ${VERBOSE} == "YES" ]] ; then echo -e "[VERBOSE MODE]---> Get .bash_bioinfo from Github\n\t---> Commande : ${CMD1}\n" ; fi
+	eval ${CMD1}
+	if [[ ${VERBOSE} == "YES" ]] ; then echo -e "[VERBOSE MODE]---> Source .bash_bioinfo\n\t---> Commande : ${CMD2}\n" ; fi
+	eval ${CMD2}
 fi
 
 ################################################################################
@@ -252,7 +264,7 @@ eval ${CMD}
 ################################################################################
 
 # Get FASTA sequences with seqids in LIST
-CMD="xargs samtools faidx ${FASTA} < ${OUTDIR}/filtered_seqids.list > ${OUTDIR}/filtered_${FASTA_NAME}.${FASTA_EXTENSION}"
+CMD="faget ${FASTA} ${OUTDIR}/filtered_seqids.list > ${OUTDIR}/filtered_${FASTA_NAME}.${FASTA_EXTENSION}"
 if [[ ${VERBOSE} == "YES" ]] ; then
 	echo -e "[VERBOSE MODE]---> Get FASTA sequences with seqids in ${OUTDIR}/filtered_seqids.list"
 	echo -e "\t---> Commande : ${CMD}\n"
@@ -301,4 +313,4 @@ rm ${OUTDIR}/${FASTA_NAME}.desc
 # END SCRIPT #
 ##############
 
-echo -e "\n##########################\n# END $( basename ${0} ) #\n##########################\n\n"
+echo -e "\n##########################\n# END $( basename ${0} ) #\n##########################\n"
