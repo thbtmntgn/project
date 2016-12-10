@@ -3,6 +3,8 @@
 use strict;
 use warnings;
 
+################################################################################
+
 ############
 # PACKAGES #
 ############
@@ -11,26 +13,40 @@ use Getopt::Long;
 use List::Util qw[min max];
 use List::Compare;
 
+################################################################################
+
 #############
 # FUNCTIONS #
 #############
 
 sub usage {
 
+	print "\n############################\n# BEGIN $0 #\n############################\n" ;
+
 	print <<EOF;
 
 Usage:
 
-Options:
-	-d | --description : description FASTA file (seqid + seqlength)
-	-g | --gff         : GFF file
-	-o | --outdir      : output directory
-	-v | --verbose     : activate verbose mode
-	-h | --help        : print this help
+	Required options:
+		-d | --description : description FASTA file (seqid + seqlength)
+		-g | --gff         : GFF file
+		-o | --outdir      : output directory
+
+	Help:
+		-v | --verbose     : activate verbose mode
+		-h | --help        : print this help
+
+Description:
 
 EOF
 
+	print "\n##########################\n# END $0 #\n##########################\n" ;
+
+	exit;
+
 }
+
+################################################################################
 
 ############
 # DEFAULTS #
@@ -41,6 +57,8 @@ my $gff         = "NOTDEFINED";
 my $outdir      = "NOTDEFINED";
 my $verbose     = 0;
 my $help        = 0;
+
+################################################################################
 
 ###########
 # OPTIONS #
@@ -54,9 +72,13 @@ GetOptions (
 	"h|help"          => \$help,        # flag
 ) or die ("Error in command line arguments\n");
 
+################################################################################
+
 if( $help || $description eq "NOTDEFINED" || $gff eq "NOTDEFINED" || $outdir eq "NOTDEFINED" ) {
 	usage();
 }
+
+################################################################################
 
 ################
 # START SCRIPT #
@@ -64,10 +86,14 @@ if( $help || $description eq "NOTDEFINED" || $gff eq "NOTDEFINED" || $outdir eq 
 
 print "\n############################\n# BEGIN $0 #\n############################\n\n" ;
 
+################################################################################
+
 # Initialize FASTA and GFF seqid hashes
 my %fasta_seqids ; # key : seqid ; value : fasta_length
 my %gff_seqids   ; # key : seqid ; value : gff_length
 
+
+################################################################################
 
 # Read description FASTA file
 if ( $verbose ) { print "[VERBOSE MODE]---> Read description FASTA file\n" ; }
@@ -93,6 +119,8 @@ if ( open( my $FH_desc, '<', $description ) ) {
 } else {
 	warn "Could not open file '$description' $!";
 }
+
+################################################################################
 
 # Read description GFF file
 if ( $verbose ) { print "[VERBOSE MODE]---> Read description FASTA file\n" ; }
@@ -146,6 +174,8 @@ if ( open( my $FH_gff, '<', $gff ) ) {
 	warn "Could not open file '$gff' $!";
 }
 
+################################################################################
+
 # Get seqid number in FASTA and GFF
 if ( $verbose ) { print "[VERBOSE MODE]---> Get seqid number in FASTA and GFF\n" ; }
 my $fasta_seqids_num = keys(%fasta_seqids) ;
@@ -186,6 +216,8 @@ if (-e $seqid_common_non_ok){ unlink $seqid_common_non_ok ; }
 if (-e $seqid_fasta_only)   { unlink $seqid_fasta_only    ; }
 if (-e $seqid_gff_only)     { unlink $seqid_gff_only      ; }
 
+################################################################################
+
 # If common seqid number is GREATER THAN zero
 if ( $verbose ) { print "[VERBOSE MODE]---> If common seqid number is GREATER THAN zero\n" ; }
 if ( $verbose ) { print "[VERBOSE MODE]\t---> Process each common seqid\n" ; }
@@ -194,6 +226,7 @@ if ( $verbose ) { print "[VERBOSE MODE]\t\t---> If sequence length from GFF is L
 if ( $verbose ) { print "[VERBOSE MODE]\t\t\t---> Print in seqid_common_good file\n" ; }
 if ( $verbose ) { print "[VERBOSE MODE]\t\t---> Else, if sequence length from GFF is GREATER than sequence length from FASTA\n" ; }
 if ( $verbose ) { print "[VERBOSE MODE]\t\t\t---> Print in seqid_common_bad file\n\n" ; }
+
 if ( $common_seqids_num > 0 ){
 
 	# Process each common seqid
@@ -228,6 +261,8 @@ if ( $common_seqids_num > 0 ){
 
 }
 
+################################################################################
+
 # If FASTA specific seqid number is GREATER THAN zero
 if ( $verbose ) { print "[VERBOSE MODE]---> If FASTA specific seqid number is GREATER THAN zero\n" ; }
 if ( $verbose ) { print "[VERBOSE MODE]\t---> Process each GFF specific seqid\n" ; }
@@ -249,11 +284,14 @@ if ( $seqid_only_fasta_num > 0 ){
 	close $FH_seqid_fasta_only;
 }
 
+################################################################################
+
 # If GFF specific seqid number is GREATER THAN zero
 if ( $verbose ) { print "[VERBOSE MODE]---> If GFF specific seqid number is GREATER THAN zero\n" ; }
 if ( $verbose ) { print "[VERBOSE MODE]\t---> Process each GFF specific seqid\n" ; }
 if ( $verbose ) { print "[VERBOSE MODE]\t\t---> Get sequence length from GFF\n" ; }
 if ( $verbose ) { print "[VERBOSE MODE]\t\t---> Print in seqid_gff_only file\n\n" ; }
+
 if ( $seqid_only_gff_num > 0 ){
 
 	# Process each GFF specific seqid
@@ -270,6 +308,8 @@ if ( $seqid_only_gff_num > 0 ){
 	close $FH_seqid_gff_only;
 }
 
+################################################################################
+
 # Prints
 print "---> seqids in FASTA      : ".$fasta_seqids_num."\n";
 print "---> seqids in GFF        : ".$gff_seqids_num."\n";
@@ -279,8 +319,10 @@ print "---> seqids in common     : ".$common_seqids_num."\n";
 print "\t---> concordant length : ".$length_ok_common_seqid_num."\n";
 print "\t---> discordant length : ".$length_non_ok_common_seqid_num."\n";
 
+################################################################################
+
 ##############
 # END SCRIPT #
 ##############
 
-print "\n##########################\n# END $0 #\n##########################\n\n" ;
+print "\n##########################\n# END $0 #\n##########################\n" ;
