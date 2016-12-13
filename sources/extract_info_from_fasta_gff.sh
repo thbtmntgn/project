@@ -28,6 +28,15 @@ function USAGE() {
 
 Description:
 
+	This scripts needs 2 input files:
+	- a FASTA file
+	- a GFF file
+
+	It checks and compare seqid names and seqids length from FASTA and GFF to:
+	- focus on seqids in common between FASTA and GFF file
+	- discard discordant seqids a.k.a seqids with different length in FASTA and GFF file
+	- discard 'too short' seqids based on -m option
+
 EOF
 
 	echo -e "\n######################################\n# END $( basename ${0} ) #\n######################################\n"
