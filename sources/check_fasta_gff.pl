@@ -21,11 +21,19 @@ use List::Compare;
 
 sub usage {
 
-	print "\n############################\n# BEGIN $0 #\n############################\n" ;
+	print "\n############################\n# BEGIN check_fasta_gff.pl #\n############################\n\n" ;
 
 	print <<EOF;
 
 Usage:
+
+	check_fasta_gff.pl -d DESCRIPTION -g GFF -o OUTDIR
+	check_fasta_gff.pl -d DESCRIPTION -g GFF -o OUTDIR -v
+	check_fasta_gff.pl -h
+
+	check_fasta_gff.pl --description DESCRIPTION --gff GFF --outdir OUTDIR
+	check_fasta_gff.pl --description DESCRIPTION --gff GFF --outdir OUTDIR --verbose
+	check_fasta_gff.pl --help
 
 	Required options:
 		-d | --description : description FASTA file (seqid + seqlength)
@@ -38,9 +46,16 @@ Usage:
 
 Description:
 
+	This script needs 2 input files :
+	- a 2-column-description file containing the name and the length of each seqid from a FASTA file
+	- a GFF file
+
+	It checks if seqids from the FASTA file are in the GFF file too.
+	It also checks if the length of each seqid is concordant between FASTA and GFF file
+
 EOF
 
-	print "\n##########################\n# END $0 #\n##########################\n" ;
+	print "\n##########################\n# END check_fasta_gff.pl #\n##########################\n" ;
 
 	exit;
 
