@@ -7,7 +7,7 @@ set -u
 
 function USAGE() {
 
-	echo -e "\n########################################\n# BEGIN $( basename ${0} ) #\n########################################\n"
+	echo -e "\n#########################\n# BEGIN $( basename ${0} ) #\n#########################\n"
 
 	printf "Usage:\n\t%s -f FASTA_FILE -g GFF_FILE -o OUTDIR [-p PREFIX] [-v]\n" $( basename ${0} )
 	printf "\t%s [-h]\n\n" $( basename ${0} )
@@ -39,7 +39,7 @@ Description:
 
 EOF
 
-	echo -e "\n######################################\n# END $( basename ${0} ) #\n######################################\n"
+	echo -e "\n#######################\n# END $( basename ${0} ) #\n#######################\n"
 
 	exit ${1:-0}
 
@@ -117,7 +117,7 @@ fi
 # BEGIN SCRIPT #
 ################
 
-echo -e "\n########################################\n# BEGIN $( basename ${0} ) #\n########################################\n"
+echo -e "\n#########################\n# BEGIN $( basename ${0} ) #\n#########################\n"
 
 ################################################################################
 
@@ -126,7 +126,7 @@ if [[ ${VERBOSE} == "YES" ]] ; then echo -e "[VERBOSE MODE]---> Verbose mode is 
 if [[ ${VERBOSE} == "YES" ]] ; then echo -e "[VERBOSE MODE]---> Your FASTA file is                 : ${FASTA_FULLNAME}" ; fi
 if [[ ${VERBOSE} == "YES" ]] ; then echo -e "[VERBOSE MODE]---> Your GFF file is                   : ${GFF_FULLNAME}"   ; fi
 if [[ ${VERBOSE} == "YES" ]] ; then echo -e "[VERBOSE MODE]---> Your output directory is           : ${OUTDIR}"         ; fi
-if [[ ${VERBOSE} == "YES" ]] ; then echo -e "[VERBOSE MODE]---> Prefix used to identify feature is : ${PREFIX}"         ; fi
+if [[ ${VERBOSE} == "YES" ]] ; then echo -e "[VERBOSE MODE]---> Prefix used to identify feature is : ${PREFIX}\n"         ; fi
 
 ################################################################################
 
@@ -137,16 +137,16 @@ if [[ -d "bash_bioinfo" ]] ; then
 	CMD3="source 'bash_bioinfo/.bash_bioinfo'"
 	if [[ ${VERBOSE} == "YES" ]] ; then echo -e "[VERBOSE MODE]---> Remove bash_bioinfo/ directory\n\t---> Commande : ${CMD1}\n" ; fi
 	eval ${CMD1}
-	if [[ ${VERBOSE} == "YES" ]] ; then echo -e "[VERBOSE MODE]---> Get .bash_bioinfo from Github\n\t---> Commande : ${CMD2}" ; fi
+	if [[ ${VERBOSE} == "YES" ]] ; then echo -e "[VERBOSE MODE]---> Get .bash_bioinfo from Github\n\t---> Commande : ${CMD2}\n" ; fi
 	eval ${CMD2}
-	if [[ ${VERBOSE} == "YES" ]] ; then echo -e "[VERBOSE MODE]---> Source .bash_bioinfo\n\t---> Commande : ${CMD3}\n" ; fi
+	if [[ ${VERBOSE} == "YES" ]] ; then echo -e "[VERBOSE MODE]---> Source .bash_bioinfo\n\t---> Commande : ${CMD3}" ; fi
 	eval ${CMD3}
 else
 	CMD1="git clone 'https://github.com/thbtmntgn/bash_bioinfo' 2> /dev/null "
 	CMD2="source 'bash_bioinfo/.bash_bioinfo'"
-	if [[ ${VERBOSE} == "YES" ]] ; then echo -e "[VERBOSE MODE]---> Get .bash_bioinfo from Github\n\t---> Commande : ${CMD1}" ; fi
+	if [[ ${VERBOSE} == "YES" ]] ; then echo -e "[VERBOSE MODE]---> Get .bash_bioinfo from Github\n\t---> Commande : ${CMD1}\n" ; fi
 	eval ${CMD1}
-	if [[ ${VERBOSE} == "YES" ]] ; then echo -e "[VERBOSE MODE]---> Source .bash_bioinfo\n\t---> Commande : ${CMD2}\n" ; fi
+	if [[ ${VERBOSE} == "YES" ]] ; then echo -e "[VERBOSE MODE]---> Source .bash_bioinfo\n\t---> Commande : ${CMD2}" ; fi
 	eval ${CMD2}
 fi
 
@@ -163,22 +163,11 @@ fi
 	# codon (-)       [vide à la création, basé sur position exon]
 	# acide aminé (-) [vide à la création, basé sur codon (-)]
 
-POSITION=1
-
-fadesc ${FASTA_PATH} | cut -f1 > ${OUTDIR}/seqids.list
-
-while read SEQID
-do
-
-	faget ${FASTA_PATH} <( echo ${SEQID} ) | grep -v ">" | grep -o . | while read NUCLEOTIDE ; do echo -e "${SEQID}\t${POSITION}\t${NUCLEOTIDE}" >> ${OUTDIR}/info_from_fasta.tsv ; POSITION=$(( ${POSITION} + 1 )) ; done
-		# faget : get sequence corresponding to SEQID
-		# grep -v ">" : discard header line
-		# grep -o . : character by character
-		# while read NUCLEOTIDE ... : print line "seqid + position + nucleotide"
-
-done < ${OUTDIR}/seqids.list
-
-rm ${OUTDIR}/seqids.list
+if [[ ${VERBOSE} == "YES" ]] ; then
+	perl extract_info_from_fasta.pl --fasta ${FASTA_PATH} --outdir ${OUTDIR} --verbose
+else
+	perl extract_info_from_fasta.pl --fasta ${FASTA_PATH} --outdir ${OUTDIR}
+fi
 
 ################################################################################
 
@@ -203,4 +192,4 @@ fi
 # END SCRIPT #
 ##############
 
-echo -e "\n######################################\n# END $( basename ${0} ) #\n######################################\n"
+echo -e "\n#######################\n# END $( basename ${0} ) #\n#######################\n"
