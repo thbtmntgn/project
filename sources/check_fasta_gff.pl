@@ -55,7 +55,7 @@ Description:
 
 EOF
 
-	print "\n##########################\n# END check_fasta_gff.pl #\n##########################\n" ;
+	print "\n##########################\n# END check_fasta_gff.pl #\n##########################\n\n" ;
 
 	exit;
 
@@ -340,4 +340,4 @@ print "\t---> discordant length : ".$length_non_ok_common_seqid_num."\n";
 # END SCRIPT #
 ##############
 
-print "\n##########################\n# END $0 #\n##########################\n" ;
+print "\n##########################\n# END $0 #\n##########################\n\n" ;
