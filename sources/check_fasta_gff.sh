@@ -131,6 +131,8 @@ if [[ ${COMPRESSED} == "YES" ]] ; then
 	gunzip -kc ${GFF_PATH} > "${OUTDIR}/${GFF_NAME}.gff"
 	FASTA="${OUTDIR}/${FASTA_NAME}.fasta"
 	GFF="${OUTDIR}/${GFF_NAME}.gff"
+	FASTA_EXTENSION="fasta"
+	GFF_EXTENSION="gff"
 elif [[ ${COMPRESSED} == "NO" ]] ; then
 	# If files are uncompressed, copy them in output directory
 	cp ${FASTA_PATH} "${OUTDIR}/${FASTA_NAME}.fasta"
@@ -145,7 +147,7 @@ fi
 if [[ -d "bash_bioinfo" ]] ; then
 	CMD1="rm -rf bash_bioinfo/"
 	CMD3="source 'bash_bioinfo/.bash_bioinfo'"
-	CMD2="git clone 'https://github.com/thbtmntgn/bash_bioinfo'"
+	CMD2="git clone 'https://github.com/thbtmntgn/bash_bioinfo' 2> /dev/null"
 	if [[ ${VERBOSE} == "YES" ]] ; then echo -e "[VERBOSE MODE]---> Remove bash_bioinfo/ directory\n\t---> Commande : ${CMD1}\n" ; fi
 	eval ${CMD1}
 	if [[ ${VERBOSE} == "YES" ]] ; then echo -e "[VERBOSE MODE]---> Get .bash_bioinfo from Github\n\t---> Commande : ${CMD2}\n" ; fi
@@ -153,7 +155,7 @@ if [[ -d "bash_bioinfo" ]] ; then
 	if [[ ${VERBOSE} == "YES" ]] ; then echo -e "[VERBOSE MODE]---> Source .bash_bioinfo\n\t---> Commande : ${CMD3}\n" ; fi
 	eval ${CMD3}
 else
-	CMD1="git clone 'https://github.com/thbtmntgn/bash_bioinfo'"
+	CMD1="git clone 'https://github.com/thbtmntgn/bash_bioinfo' 2> /dev/null"
 	CMD2="source 'bash_bioinfo/.bash_bioinfo'"
 	if [[ ${VERBOSE} == "YES" ]] ; then echo -e "[VERBOSE MODE]---> Get .bash_bioinfo from Github\n\t---> Commande : ${CMD1}\n" ; fi
 	eval ${CMD1}
@@ -164,15 +166,15 @@ fi
 ################################################################################
 
 # Verbose prints
-if [[ ${VERBOSE} == "YES" ]] ; then echo -e "[VERBOSE MODE]---> Verbose mode is activated"              ; fi
-if [[ ${VERBOSE} == "YES" ]] ; then echo -e "[VERBOSE MODE]---> Your FASTA file is : ${FASTA_FULLNAME}" ; fi
-if [[ ${VERBOSE} == "YES" ]] ; then echo -e "[VERBOSE MODE]---> Your GFF file is   : ${GFF_FULLNAME}"   ; fi
+if [[ ${VERBOSE} == "YES" ]] ; then echo -e "[VERBOSE MODE]---> Your GFF file is           : ${GFF_FULLNAME}"   ; fi
+if [[ ${VERBOSE} == "YES" ]] ; then echo -e "[VERBOSE MODE]---> Your FASTA file is         : ${FASTA_FULLNAME}" ; fi
+if [[ ${VERBOSE} == "YES" ]] ; then echo -e "[VERBOSE MODE]---> Your output directory is   : ${OUTDIR}\n"       ; fi
+if [[ ${VERBOSE} == "YES" ]] ; then echo -e "[VERBOSE MODE]---> Minimal sequence length is : ${MIN_LENGTH}"     ; fi
+if [[ ${VERBOSE} == "YES" ]] ; then echo -e "[VERBOSE MODE]---> Verbose mode is activated"                      ; fi
 if [[ ${VERBOSE} == "YES" ]] ; then
-	if [[ ${COMPRESSED} == "YES" ]] ; then echo -e "[VERBOSE MODE]---> FASTA and GFF files are compressed"     ; fi
-	if [[ ${COMPRESSED} == "NO" ]]  ; then echo -e "[VERBOSE MODE]---> FASTA and GFF files are not compressed" ; fi
+	if [[ ${COMPRESSED} == "YES" ]] ; then echo -e "[VERBOSE MODE]---> FASTA and GFF files are compressed"      ; fi
+	if [[ ${COMPRESSED} == "NO" ]]  ; then echo -e "[VERBOSE MODE]---> FASTA and GFF files are not compressed"  ; fi
 fi
-if [[ ${VERBOSE} == "YES" ]] ; then echo -e "[VERBOSE MODE]---> Minimal sequence length is : ${MIN_LENGTH}" ; fi
-if [[ ${VERBOSE} == "YES" ]] ; then echo -e "[VERBOSE MODE]---> Your output directory is   : ${OUTDIR}\n"   ; fi
 
 ################################################################################
 
@@ -294,7 +296,7 @@ eval ${CMD}
 # Check seqids number in LIST, new FASTA and new GFF
 
 FASTA_SEQID_NUM=$( grep -c ">" ${OUTDIR}/filtered_${FASTA_NAME}.${FASTA_EXTENSION} )
-GFF_SEQID_NUM=$( cat ${OUTDIR}/filtered_${GFF_NAME}.${GFF_EXTENSION} | cut -f1 | sort -u | wc -l | awk '{print $1}' )
+GFF_SEQID_NUM=$( grep -v "^#" ${OUTDIR}/filtered_${GFF_NAME}.${GFF_EXTENSION} | cut -f1 | sort -u | wc -l | awk '{ print $1 }' )
 
 if [[ ${SEQIDS_FILTERED_NUM} -eq ${FASTA_SEQID_NUM} && ${SEQIDS_FILTERED_NUM} -eq ${GFF_SEQID_NUM} ]] ; then
 	echo -e "---> ALL GOOD !"
