@@ -114,33 +114,35 @@ if ( open( my $FH_gff, '<', $gff ) ) {
 	# Process each line
 	while ( my $row = <$FH_gff> ) {
 
-		# Get sequence ID and sequence length
 		chomp $row;
-		my @column     = split "\t", $row;
-		my $seqid      = $column[0];
-		my $source     = $column[1];
-		my $type       = $column[2];
-		my $start      = $column[3];
-		my $end        = $column[4];
-		my $score      = $column[5];
-		my $strand     = $column[6];
-		my $phase      = $column[7];
 
-		my @attributes = split ";", $column[8];
-		my %attributes;
-		my @attribute;
+		if ( $row !~ /^#/ ){
+			my @column     = split "\t", $row;
+			my $seqid      = $column[0];
+			my $source     = $column[1];
+			my $type       = $column[2];
+			my $start      = $column[3];
+			my $end        = $column[4];
+			my $score      = $column[5];
+			my $strand     = $column[6];
+			my $phase      = $column[7];
 
-		foreach my $attribute ( @attributes ) {
-			@attribute = split "=", $attribute;
-			$attributes{ $attribute[0] } = $attribute[1];
-		}
+			my @attributes = split ";", $column[8];
+			my %attributes;
+			my @attribute;
 
-		if ( $type eq "exon" || $type eq "gene" ){
-			if (exists $attributes{$prefix}){
-				print $FH_info_from_gff $seqid."\t".$strand."\t".$start."\t".$end."\t".$type."\t".$attributes{$prefix}."\n";
-			} else {
-				print STDERR "\n/!\\ '".$prefix."' is a BAD PREFIX ! All features in GFF do not have it ! Try another one ! /!\\\n" ;
-				exit ;
+			foreach my $attribute ( @attributes ) {
+				@attribute = split "=", $attribute;
+				$attributes{ $attribute[0] } = $attribute[1];
+			}
+
+			if ( $type eq "exon" || $type eq "gene" ){
+				if (exists $attributes{$prefix}){
+					print $FH_info_from_gff $seqid."\t".$strand."\t".$start."\t".$end."\t".$type."\t".$attributes{$prefix}."\n";
+				} else {
+					print STDERR "\n/!\\ '".$prefix."' is a BAD PREFIX ! All features in GFF do not have it ! Try another one ! /!\\\n" ;
+					exit ;
+				}
 			}
 		}
 	}
