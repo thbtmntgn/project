@@ -74,8 +74,8 @@ my $help    = 0            ;
 
 GetOptions (
 	"g|gff=s"    => \$gff,     # file
-	"p|prefix=s" => \$prefix,  # file
 	"o|outdir=s" => \$outdir,  # file
+	"p|prefix=s" => \$prefix,  # file
 	"v|verbose"  => \$verbose, # flag
 	"h|help"     => \$help,    # flag
 ) or die ("Error in command line arguments\n") ;
@@ -105,9 +105,11 @@ if ( $verbose ){
 
 ################################################################################
 
-my $outfile = "$outdir/info_from_gff.tsv";
+my $outfile_gff = "$outdir/info_from_gff.tsv";
+my $outfile_cds = "$outdir/info_from_cds.tsv";
 
-open( my $FH_info_from_gff, '>>', $outfile ) or die "Could not open file '$outfile' $!" ;
+open( my $FH_info_from_gff, '>>', $outfile_gff ) or die "Could not open file '$outfile_gff' $!" ;
+open( my $FH_info_from_cds, '>>', $outfile_cds ) or die "Could not open file '$outfile_cds' $!" ;
 
 if ( open( my $FH_gff, '<', $gff ) ) {
 
@@ -137,8 +139,15 @@ if ( open( my $FH_gff, '<', $gff ) ) {
 			}
 
 			if ( $type eq "exon" || $type eq "gene" ){
-				if (exists $attributes{$prefix}){
+				if ( exists $attributes{$prefix} ){
 					print $FH_info_from_gff $seqid."\t".$strand."\t".$start."\t".$end."\t".$type."\t".$attributes{$prefix}."\n";
+				} else {
+					print STDERR "\n/!\\ '".$prefix."' is a BAD PREFIX ! All features in GFF do not have it ! Try another one ! /!\\\n" ;
+					exit ;
+				}
+			} elsif ( $type eq "CDS" ){
+				if ( exists $attributes{$prefix} ){
+					print $FH_info_from_cds $seqid."\t".$strand."\t".$start."\t".$end."\t".$phase."\t".$attributes{$prefix}."\n";
 				} else {
 					print STDERR "\n/!\\ '".$prefix."' is a BAD PREFIX ! All features in GFF do not have it ! Try another one ! /!\\\n" ;
 					exit ;
@@ -154,6 +163,7 @@ if ( open( my $FH_gff, '<', $gff ) ) {
 }
 
 close( $FH_info_from_gff ) ;
+close( $FH_info_from_cds ) ;
 
 ################################################################################
 
