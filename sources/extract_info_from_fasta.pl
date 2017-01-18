@@ -93,7 +93,7 @@ if ( $verbose ){
 
 ################################################################################
 
-my $outfile = "$outdir/info_from_fasta.tsv";
+my $outfile = "$outdir/info_from_fasta_incomplete.tsv";
 
 my $seqid;
 my $position = 0;
@@ -119,7 +119,7 @@ if ( open( my $FH_fasta, '<', $fasta ) ) {
 		} else {
 			foreach my $nucleotide (split //, $line) {
 				# print $seqid."\t".$position."\t".$nucleotide."\n";
-				print $FH_info_from_fasta $seqid."\t".$position."\t".$nucleotide."\n";
+				print $FH_info_from_fasta $seqid."\t".$position."\t".$nucleotide."\tNA\tNA\tNA\tNA\tNA"."\n";
 				$position = $position + 1;
 			}
 		}
