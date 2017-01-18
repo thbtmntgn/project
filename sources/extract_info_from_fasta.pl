@@ -96,10 +96,10 @@ if ( $verbose ){
 my $outfile = "$outdir/info_from_fasta_incomplete.tsv";
 
 my $seqid;
-my $position = 0;
-my $last_position = 0;
+my $pos = 0;
+my $last_pos = 0;
 
-open( my $FH_info_from_fasta, '>>', $outfile ) or die "Could not open file '$outfile' $!" ;
+open( my $FH_fasta, '>>', $outfile ) or die "Could not open file '$outfile' $!" ;
 
 if ( open( my $FH_fasta, '<', $fasta ) ) {
 
@@ -115,12 +115,12 @@ if ( open( my $FH_fasta, '<', $fasta ) ) {
 			if ( $verbose ){
 				print "\t".$seqid."\n";
 			}
-			$position = 1;
+			$pos = 1;
 		} else {
-			foreach my $nucleotide (split //, $line) {
-				# print $seqid."\t".$position."\t".$nucleotide."\n";
-				print $FH_info_from_fasta $seqid."\t".$position."\t".$nucleotide."\tNA\tNA\tNA\tNA\tNA"."\n";
-				$position = $position + 1;
+			foreach my $nuc (split //, $line) {
+				# print $seqid."\t".$pos."\t".$nuc."\n";
+				print $FH_fasta $seqid."\t".$pos."\t".$nuc."\n";
+				$pos = $pos + 1;
 			}
 		}
 	}
@@ -131,7 +131,7 @@ if ( open( my $FH_fasta, '<', $fasta ) ) {
 	warn "Could not open file '$fasta' $!";
 }
 
-close( $FH_info_from_fasta ) ;
+close( $FH_fasta ) ;
 
 ################################################################################
 
