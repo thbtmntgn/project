@@ -38,6 +38,10 @@ do
 			;;
 		o)
 			OUTDIR=${OPTARG}
+			mkdir -p ${OUTDIR}
+			#-p option
+				# Create intermediate directories as required.
+				# With this option specified, no error will be reported if a directory given as an operand already exists.
 			;;
 		v)
 			VERBOSE="YES"
@@ -72,16 +76,23 @@ fi
 ################################################################################
 
 
-if [[ ${VERBOSE} == "YES" ]] ; then echo "Generating ${OUTDIR}/create_database.sql...." ; fi
+if [[ ${VERBOSE} == "YES" ]] ; then echo -e "> Generating ${OUTDIR}/create_database.sql...." ; fi
 
 # Replace DB_NAME by DATABASE in create_database_template.sql
 sed "s/DB_NAME/${DATABASE}/g" create_database_template.sql > ${OUTDIR}/create_database.sql
 
-if [[ ${VERBOSE} == "YES" ]] ; then echo "Generating ${OUTDIR}/create_database.sql OK!" ; fi
+if [[ ${VERBOSE} == "YES" ]] ; then echo -e "> Generating ${OUTDIR}/create_database.sql OK!\n" ; fi
 
-CMD="mysql --user=root --password < ${OUTDIR}/create_database.sql"
-if [[ ${VERBOSE} == "YES" ]] ; then echo "Command : ${CMD}" ; fi
-eval ${CMD}
+CMD1="mysql.server start"
+CMD2="mysql --user=root --password < ${OUTDIR}/create_database.sql"
+CMD3="mysql.server stop"
+
+if [[ ${VERBOSE} == "YES" ]] ; then echo -e "> Command : ${CMD1}\n" ; fi
+eval ${CMD1}
+if [[ ${VERBOSE} == "YES" ]] ; then echo -e "> Command : ${CMD2}\n" ; fi
+eval ${CMD2}
+if [[ ${VERBOSE} == "YES" ]] ; then echo -e "> Command : ${CMD3}\n" ; fi
+eval ${CMD3}
 
 ################################################################################
 
@@ -89,4 +100,4 @@ eval ${CMD}
 # END SCRIPT #
 ##############
 
-echo -e "\n##########################\n# END $( basename ${0} ) #\n##########################\n\n"
+echo -e "\n##########################\n# END $( basename ${0} ) #\n##########################\n"
