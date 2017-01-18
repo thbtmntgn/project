@@ -164,9 +164,12 @@ fi
 	# acide aminé (-) [vide à la création, basé sur codon (-)]
 
 if [[ ${VERBOSE} == "YES" ]] ; then
-	perl extract_info_from_fasta.pl --fasta ${FASTA_PATH} --outdir ${OUTDIR} --verbose
+	CMD="perl extract_info_from_fasta.pl --fasta ${FASTA_PATH} --outdir ${OUTDIR} --verbose"
+	echo "${CMD}"
+	eval ${CMD}
 else
-	perl extract_info_from_fasta.pl --fasta ${FASTA_PATH} --outdir ${OUTDIR}
+	CMD="perl extract_info_from_fasta.pl --fasta ${FASTA_PATH} --outdir ${OUTDIR}"
+	eval ${CMD}
 fi
 
 ################################################################################
@@ -181,12 +184,31 @@ fi
 	# feature ID (premier champ colonne 9 ou champ indiqué par user)
 
 if [[ ${VERBOSE} == "YES" ]] ; then
-	perl extract_info_from_gff.pl --gff ${GFF_PATH} --outdir ${OUTDIR} --prefix ${PREFIX} --verbose
+	CMD="perl extract_info_from_gff.pl --gff ${GFF_PATH} --outdir ${OUTDIR} --prefix ${PREFIX} --verbose"
+	echo "${CMD}"
+	eval ${CMD}
 else
-	perl extract_info_from_gff.pl --gff ${GFF_PATH} --outdir ${OUTDIR} --prefix ${PREFIX}
+	CMD="perl extract_info_from_gff.pl --gff ${GFF_PATH} --outdir ${OUTDIR} --prefix ${PREFIX}"
+	eval ${CMD}
 fi
 
 ################################################################################
+
+# Calculated fields
+# codon (+)       [vide à la création, basé sur position exon]
+# acide aminé (+) [vide à la création, basé sur codon (+)]
+# nucléotide (-)  [vide à la création]
+# codon (-)       [vide à la création, basé sur position exon]
+# acide aminé (-) [vide à la création, basé sur codon (-)]
+
+if [[ ${VERBOSE} == "YES" ]] ; then
+	CMD="perl calculated_fields.pl --fasta ${OUTDIR}/info_from_fasta_incomplete.tsv --cds ${OUTDIR}/info_from_cds.tsv --outdir ${OUTDIR} --verbose"
+	echo "${CMD}"
+	eval ${CMD}
+else
+	CMD="perl calculated_fields.pl --fasta ${OUTDIR}/info_from_fasta_incomplete.tsv --cds ${OUTDIR}/info_from_cds.tsv --outdir ${OUTDIR}"
+	eval ${CMD}
+fi
 
 ##############
 # END SCRIPT #
