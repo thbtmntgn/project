@@ -9,6 +9,7 @@ use warnings;
 # PACKAGES #
 ############
 
+use Cwd;
 use Getopt::Long;
 
 ################################################################################
@@ -19,20 +20,25 @@ use Getopt::Long;
 
 sub usage {
 
-	print "\n##################################\n# BEGIN $0 #\n##################################\n" ;
-
-	print <<EOF;
+	print STDERR <<EOF;
 
 Usage:
+	extract_info_from_gff.pl -g GFF -p PREFIX [-v]
+	extract_info_from_gff.pl [-h]
 
-	Required options:
-		-g | --gff     : GFF file
-		-p | --prefix  : PREFIX to select the field used in attributes GFF column 9 to identify features
-		-o | --outdir  : output directory
+	extract_info_from_gff.pl --gff GFF --prefix PREFIX [--verbose]
+	extract_info_from_gff.pl [--help]
 
-	Help:
-		-v | --verbose : activate verbose mode
-		-h | --help    : print this help
+Required arguments:
+	-g | --gff     : GFF file
+	-p | --prefix  : PREFIX to select the field used in attributes GFF column 9 to identify features
+
+Optional arguments:
+	-o | --outdir  : output directory      [by default: working directory]
+
+Help:
+	-h | --help    : print this help
+	-v | --verbose : activate verbose mode [by default: not activated]
 
 Description:
 
@@ -45,10 +51,7 @@ Description:
 	- end position
 	- feature type ('gene' or 'exon' only)
 	- feature ID (based on -p|--prefix option, by default : 'ID')
-
 EOF
-
-	print "\n################################\n# END $0 #\n################################\n" ;
 
 	exit;
 
@@ -60,9 +63,9 @@ EOF
 # DEFAULTS #
 ############
 
-my $gff     = "NOTDEFINED" ;
-my $prefix  = "NOTDEFINED" ;
-my $outdir  = "NOTDEFINED" ;
+my $gff     = "NOTDEFINED";
+my $prefix  = "NOTDEFINED";
+my $outdir  = getcwd()     ;
 my $verbose = 0            ;
 my $help    = 0            ;
 
@@ -92,15 +95,14 @@ if( $help || $gff eq "NOTDEFINED" || $outdir eq "NOTDEFINED" || $prefix eq "NOTD
 # START SCRIPT #
 ################
 
-print "\n##################################\n# BEGIN $0 #\n##################################\n\n" ;
+print STDERR "\n# BEGIN extract_info_from_gff.pl\n";
 
 ################################################################################
 
-
 if ( $verbose ){
-	print "[VERBOSE MODE]---> GFF file        : ".$gff."\n"    ;
-	print "[VERBOSE MODE]---> Prefix used     : ".$prefix."\n" ;
-	print "[VERBOSE MODE]---> Output diretory : ".$outdir."\n" ;
+	print STDERR "\t[VERBOSE] ---> GFF file        : ".$gff."\n"    ;
+	print STDERR "\t[VERBOSE] ---> Prefix used     : ".$prefix."\n";
+	print STDERR "\t[VERBOSE] ---> Output diretory : ".$outdir."\n";
 }
 
 ################################################################################
@@ -108,18 +110,18 @@ if ( $verbose ){
 my $outfile_gff = "$outdir/info_from_gff.tsv";
 my $outfile_cds = "$outdir/info_from_cds.tsv";
 
-open( my $FH_info_from_gff, '>>', $outfile_gff ) or die "Could not open file '$outfile_gff' $!" ;
-open( my $FH_info_from_cds, '>>', $outfile_cds ) or die "Could not open file '$outfile_cds' $!" ;
+open( my $FH_info_from_gff, '>>', $outfile_gff ) or die "Could not open file '$outfile_gff' $!";
+open( my $FH_info_from_cds, '>>', $outfile_cds ) or die "Could not open file '$outfile_cds' $!";
 
 if ( open( my $FH_gff, '<', $gff ) ) {
 
 	# Process each line
-	while ( my $row = <$FH_gff> ) {
+	while ( my $line = <$FH_gff> ) {
 
-		chomp $row;
+		chomp $line;
 
-		if ( $row !~ /^#/ ){
-			my @column     = split "\t", $row;
+		if ( $line !~ /^#/ ){
+			my @column     = split "\t", $line;
 			my $seqid      = $column[0];
 			my $source     = $column[1];
 			my $type       = $column[2];
@@ -142,14 +144,14 @@ if ( open( my $FH_gff, '<', $gff ) ) {
 				if ( exists $attributes{$prefix} ){
 					print $FH_info_from_gff $seqid."\t".$strand."\t".$start."\t".$end."\t".$type."\t".$attributes{$prefix}."\n";
 				} else {
-					print STDERR "\n/!\\ '".$prefix."' is a BAD PREFIX ! All features in GFF do not have it ! Try another one ! /!\\\n" ;
+					print STDERR "\n/!\\ '".$prefix."' is a BAD PREFIX ! All features in GFF do not have it ! Try another one ! /!\\\n";
 					exit ;
 				}
 			} elsif ( $type eq "CDS" ){
 				if ( exists $attributes{$prefix} ){
 					print $FH_info_from_cds $seqid."\t".$strand."\t".$start."\t".$end."\t".$phase."\t".$attributes{$prefix}."\n";
 				} else {
-					print STDERR "\n/!\\ '".$prefix."' is a BAD PREFIX ! All features in GFF do not have it ! Try another one ! /!\\\n" ;
+					print STDERR "\n/!\\ '".$prefix."' is a BAD PREFIX ! All features in GFF do not have it ! Try another one ! /!\\\n";
 					exit ;
 				}
 			}
@@ -171,4 +173,4 @@ close( $FH_info_from_cds ) ;
 # END SCRIPT #
 ##############
 
-print "\n################################\n# END $0 #\n################################\n" ;
+print STDERR "# END extract_info_from_gff.pl\n\n";
