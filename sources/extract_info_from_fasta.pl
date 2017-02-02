@@ -9,6 +9,7 @@ use warnings;
 # PACKAGES #
 ############
 
+use Cwd;
 use Getopt::Long;
 
 ################################################################################
@@ -19,27 +20,29 @@ use Getopt::Long;
 
 sub usage {
 
-	print "\n####################################\n# BEGIN $0 #\n####################################\n" ;
-
 	print <<EOF;
 
 Usage:
+	extract_info_from_fasta.pl -f FASTA [-o OUTDIR] [-v]
+	extract_info_from_fasta.pl [-h]
 
-	Required options:
-		-f | --fasta   : FASTA file
-		-o | --outdir  : output directory
+	extract_info_from_fasta.pl --fasta FASTA [--outdir OUTDIR] [--verbose]
+	extract_info_from_fasta.pl [--help]
 
-	Help:
-		-v | --verbose : activate verbose mode
-		-h | --help    : print this help
+Required arguments:
+	-f | --fasta   : FASTA file
+
+Optional arguments:
+	-o | --outdir  : output directory      [by default: working directory]
+
+Help:
+	-h | --help    : print this help
+	-v | --verbose : activate verbose mode [by default: not activated]
 
 Description:
 
 	Extract information from a GFF FASTA.
-
 EOF
-
-	print "\n##################################\n# END $0 #\n##################################\n" ;
 
 	exit;
 
@@ -52,7 +55,7 @@ EOF
 ############
 
 my $fasta   = "NOTDEFINED" ;
-my $outdir  = "NOTDEFINED" ;
+my $outdir  = getcwd()     ;
 my $verbose = 0            ;
 my $help    = 0            ;
 
@@ -71,7 +74,7 @@ GetOptions (
 
 ################################################################################
 
-if( $help || $fasta eq "NOTDEFINED" || $outdir eq "NOTDEFINED" ) {
+if( $help || $fasta eq "NOTDEFINED" ) {
 	usage();
 }
 
@@ -81,14 +84,13 @@ if( $help || $fasta eq "NOTDEFINED" || $outdir eq "NOTDEFINED" ) {
 # START SCRIPT #
 ################
 
-print "\n####################################\n# BEGIN $0 #\n####################################\n\n" ;
+print STDERR "\n# BEGIN extract_info_from_fasta.pl\n" ;
 
 ################################################################################
 
-
 if ( $verbose ){
-	print "[VERBOSE MODE]---> FASTA file      : ".$fasta."\n"    ;
-	print "[VERBOSE MODE]---> Output diretory : ".$outdir."\n" ;
+	print STDERR "\t[VERBOSE] ---> FASTA file      : ".$fasta."\n"    ;
+	print STDERR "\t[VERBOSE] ---> Output diretory : ".$outdir."\n" ;
 }
 
 ################################################################################
@@ -99,39 +101,36 @@ my $seqid;
 my $pos = 0;
 my $last_pos = 0;
 
-open( my $FH_fasta, '>>', $outfile ) or die "Could not open file '$outfile' $!" ;
+open( my $FH_fasta_out, '>>', $outfile ) or die "Could not open file '$outfile' $!" ;
 
-if ( open( my $FH_fasta, '<', $fasta ) ) {
+if ( open( my $FH_fasta_in, '<', $fasta ) ) {
 
-	if ( $verbose ){ print "\n[VERBOSE MODE]---> Process each sequence\n"; }
+	if ( $verbose ){ print STDERR "\t[VERBOSE] ---> Process each sequence\n"; }
 
 	# Process each line
-	while ( my $line = <$FH_fasta> ) {
+	while ( my $line = <$FH_fasta_in> ) {
 
 		chomp $line;
 
 		if ( $line =~ /^>(\S+)/ ){
 			$seqid = $1;
-			if ( $verbose ){
-				print "\t".$seqid."\n";
-			}
+			# print STDERR "\t".$seqid."\n";
 			$pos = 1;
 		} else {
 			foreach my $nuc (split //, $line) {
-				# print $seqid."\t".$pos."\t".$nuc."\n";
-				print $FH_fasta $seqid."\t".$pos."\t".$nuc."\n";
+				print $FH_fasta_out $seqid."\t".$pos."\t".$nuc."\n";
 				$pos = $pos + 1;
 			}
 		}
 	}
 
-	close( $FH_fasta ) ;
+	close( $FH_fasta_in ) ;
 
 } else {
 	warn "Could not open file '$fasta' $!";
 }
 
-close( $FH_fasta ) ;
+close( $FH_fasta_out ) ;
 
 ################################################################################
 
@@ -139,4 +138,4 @@ close( $FH_fasta ) ;
 # END SCRIPT #
 ##############
 
-print "\n##################################\n# END $0 #\n##################################\n" ;
+print STDERR "# END extract_info_from_fasta.pl\n\n"; ;
