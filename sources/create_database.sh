@@ -6,16 +6,29 @@ set -u
 ############
 
 function USAGE() {
-	printf "Usage:\n\t%s -d DATABASE_NAME -o OUTDIR [-v]\n" $( basename ${0} )
-	printf "\t%s -h\n\n" $( basename ${0} )
-	echo -e "Required arguments :"
-	echo -e "\t-d : database name"
-	echo -e "\t-o : output directory"
-	echo
-	echo -e "Help :"
-	echo -e "\t-v to activate verbose mode [by default : not activated]"
-	echo -e "\t-h print this help"
+
+	printf "Usage:\n\t%s -d DATABASE_NAME [-o OUTDIR] [-v]\n" $( basename ${0} )
+	printf "\t%s [-h]\n" $( basename ${0} )
+
+	cat <<EOF
+
+Required arguments:
+	-d : database name
+
+Optional arguments:
+	-o : output directory       [by default: working directory]
+
+Help :
+	-h print this help
+	-v to activate verbose mode [by default: not activated]
+
+Description:
+
+	TO BE COMPLETED!
+EOF
+
 	exit ${1:-0}
+
 }
 
 #####################
@@ -23,7 +36,7 @@ function USAGE() {
 #####################
 
 DATABASE="NOTDEFINED"
-OUTDIR="NOTDEFINED"
+OUTDIR=$( pwd )
 VERBOSE="NO"
 
 ##################
@@ -60,18 +73,19 @@ do
 	esac
 done
 
+################################################################################
+
+if [[ ${DATABASE} == "NOTDEFINED" ]] ; then
+	USAGE
+fi
+
+################################################################################
+
 ################
 # BEGIN SCRIPT #
 ################
 
-echo -e "\n############################\n# BEGIN $( basename ${0} ) #\n############################\n"
-
-################################################################################
-
-if [[ ${DATABASE} == "NOTDEFINED" || ${OUTDIR} == "NOTDEFINED" ]] ; then
-	USAGE
-	exit 1
-fi
+echo -e "\n# BEGIN $( basename ${0} )"
 
 ################################################################################
 
@@ -100,4 +114,4 @@ eval ${CMD3}
 # END SCRIPT #
 ##############
 
-echo -e "\n##########################\n# END $( basename ${0} ) #\n##########################\n"
+echo -e "# END $( basename ${0} )\n"
