@@ -83,102 +83,132 @@ sub iupac_nuc {
 
 	# Based on http://www.bioinformatics.org/sms/iupac.html
 
-	my @nuc = shift;
+	my @nuc = shift; # Array must contains at least 1 element (A, C, G, T, N, or *)
+	my @nuc_without_asterisk;
+	my $asterisk = 0;
+	my $iupac_nuc;
+
+	# Create another array without the "*"
+	foreach my $elem (@nuc){
+
+		if ($elem ne "*"){
+			push @nuc_without_asterisk, $elem;
+		}
+
+		if ($elem eq "*"){
+			$asterisk = 1;
+		}
+
+	}
 
 	my $nuc_number = @nuc;
 
-	if ($nuc_number == 1){
+	# If length array is equal to 0, it means the initial array contained only "*"
+	if ( @nuc_without_asterisk == 0 ){
+
+		return "*";
+
+	} elsif ( @nuc_without_asterisk == 1 ){
 
 		# if A --> A
-		if    ($nuc[0] eq "A"){ return "A"}
+		if    ($nuc[0] eq "A"){ $iupac_nuc = "A"}
 
 		# if C --> C
-		elsif ($nuc[0] eq "C"){ return "C"}
+		elsif ($nuc[0] eq "C"){ $iupac_nuc = "C"}
 
 		# if G --> G
-		elsif ($nuc[0] eq "G"){ return "G"}
+		elsif ($nuc[0] eq "G"){ $iupac_nuc = "G"}
 
 		# if T --> T
-		elsif ($nuc[0] eq "T"){ return "T"}
+		elsif ($nuc[0] eq "T"){ $iupac_nuc = "T"}
 
 		# else N --> N
-		elsif ($nuc[0] eq "N"){ return "N"}
+		elsif ($nuc[0] eq "N"){ $iupac_nuc = "N"}
 
-		else { print STDERR "Problem with iupac_nuc subroutine : nucleotide is not A, C, G, T or N"}
+		else {
+			print STDERR "Problem with iupac_nuc subroutine : nucleotide is not A, C, G, T or N\n";
+			print STDERR $nuc[0]."\n";
+		}
 
-	} elsif ($nuc_number == 2){
+	} elsif (@nuc_without_asterisk == 2){
 
 		# if A or G --> R
-		if    ($nuc[0] eq "A" && $nuc[1] eq "G" ){ return "R"}
-		elsif ($nuc[0] eq "G" && $nuc[1] eq "A" ){ return "R"}
+		if    ($nuc[0] eq "A" && $nuc[1] eq "G" ){ $iupac_nuc = "R"}
+		elsif ($nuc[0] eq "G" && $nuc[1] eq "A" ){ $iupac_nuc = "R"}
 
 		# if C or T --> Y
-		elsif ($nuc[0] eq "C" && $nuc[1] eq "T" ){ return "Y"}
-		elsif ($nuc[0] eq "T" && $nuc[1] eq "C" ){ return "Y"}
+		elsif ($nuc[0] eq "C" && $nuc[1] eq "T" ){ $iupac_nuc = "Y"}
+		elsif ($nuc[0] eq "T" && $nuc[1] eq "C" ){ $iupac_nuc = "Y"}
 
 		# if G or C --> S
-		elsif ($nuc[0] eq "G" && $nuc[1] eq "C" ){ return "S"}
-		elsif ($nuc[0] eq "C" && $nuc[1] eq "G" ){ return "S"}
+		elsif ($nuc[0] eq "G" && $nuc[1] eq "C" ){ $iupac_nuc = "S"}
+		elsif ($nuc[0] eq "C" && $nuc[1] eq "G" ){ $iupac_nuc = "S"}
 
 		# if A or T --> W
-		elsif ($nuc[0] eq "A" && $nuc[1] eq "T" ){ return "W"}
-		elsif ($nuc[0] eq "T" && $nuc[1] eq "A" ){ return "W"}
+		elsif ($nuc[0] eq "A" && $nuc[1] eq "T" ){ $iupac_nuc = "W"}
+		elsif ($nuc[0] eq "T" && $nuc[1] eq "A" ){ $iupac_nuc = "W"}
 
 		# if G or T --> K
-		elsif ($nuc[0] eq "G" && $nuc[1] eq "T" ){ return "K"}
-		elsif ($nuc[0] eq "T" && $nuc[1] eq "G" ){ return "K"}
+		elsif ($nuc[0] eq "G" && $nuc[1] eq "T" ){ $iupac_nuc = "K"}
+		elsif ($nuc[0] eq "T" && $nuc[1] eq "G" ){ $iupac_nuc = "K"}
 
 		# if A or C --> M
-		elsif ($nuc[0] eq "A" && $nuc[1] eq "C" ){ return "M"}
-		elsif ($nuc[0] eq "C" && $nuc[1] eq "A" ){ return "M"}
+		elsif ($nuc[0] eq "A" && $nuc[1] eq "C" ){ $iupac_nuc = "M"}
+		elsif ($nuc[0] eq "C" && $nuc[1] eq "A" ){ $iupac_nuc = "M"}
 
 		# else --> N
-		elsif ($nuc[0] eq "N" || $nuc[1] eq "N" ){ return "N"}
+		elsif ($nuc[0] eq "N" || $nuc[1] eq "N" ){ $iupac_nuc = "N"}
 
-		else { print STDERR "Problem with iupac_nuc subroutine : nucleotide is not A, C, G, T or N"}
+		else { print STDERR "Problem with iupac_nuc subroutine : nucleotide is not A, C, G, T or N\n"}
 
-	} elsif ($nuc_number == 3){
+	} elsif (@nuc_without_asterisk == 3){
 
 		# if C or G or T --> B
-		if    ($nuc[0] eq "C" && $nuc[1] eq "G" && $nuc[1] eq "T" ){ return "B"}
-		elsif ($nuc[0] eq "C" && $nuc[1] eq "T" && $nuc[1] eq "G" ){ return "B"}
-		elsif ($nuc[0] eq "G" && $nuc[1] eq "C" && $nuc[1] eq "T" ){ return "B"}
-		elsif ($nuc[0] eq "G" && $nuc[1] eq "T" && $nuc[1] eq "C" ){ return "B"}
-		elsif ($nuc[0] eq "T" && $nuc[1] eq "C" && $nuc[1] eq "G" ){ return "B"}
-		elsif ($nuc[0] eq "T" && $nuc[1] eq "G" && $nuc[1] eq "C" ){ return "B"}
+		if    ($nuc[0] eq "C" && $nuc[1] eq "G" && $nuc[1] eq "T" ){ $iupac_nuc = "B"}
+		elsif ($nuc[0] eq "C" && $nuc[1] eq "T" && $nuc[1] eq "G" ){ $iupac_nuc = "B"}
+		elsif ($nuc[0] eq "G" && $nuc[1] eq "C" && $nuc[1] eq "T" ){ $iupac_nuc = "B"}
+		elsif ($nuc[0] eq "G" && $nuc[1] eq "T" && $nuc[1] eq "C" ){ $iupac_nuc = "B"}
+		elsif ($nuc[0] eq "T" && $nuc[1] eq "C" && $nuc[1] eq "G" ){ $iupac_nuc = "B"}
+		elsif ($nuc[0] eq "T" && $nuc[1] eq "G" && $nuc[1] eq "C" ){ $iupac_nuc = "B"}
 
 		# if A or G or T --> D
-		elsif ($nuc[0] eq "A" && $nuc[1] eq "G" && $nuc[1] eq "T" ){ return "D"}
-		elsif ($nuc[0] eq "A" && $nuc[1] eq "T" && $nuc[1] eq "G" ){ return "D"}
-		elsif ($nuc[0] eq "G" && $nuc[1] eq "A" && $nuc[1] eq "T" ){ return "D"}
-		elsif ($nuc[0] eq "G" && $nuc[1] eq "T" && $nuc[1] eq "A" ){ return "D"}
-		elsif ($nuc[0] eq "T" && $nuc[1] eq "A" && $nuc[1] eq "G" ){ return "D"}
-		elsif ($nuc[0] eq "T" && $nuc[1] eq "G" && $nuc[1] eq "A" ){ return "D"}
+		elsif ($nuc[0] eq "A" && $nuc[1] eq "G" && $nuc[1] eq "T" ){ $iupac_nuc = "D"}
+		elsif ($nuc[0] eq "A" && $nuc[1] eq "T" && $nuc[1] eq "G" ){ $iupac_nuc = "D"}
+		elsif ($nuc[0] eq "G" && $nuc[1] eq "A" && $nuc[1] eq "T" ){ $iupac_nuc = "D"}
+		elsif ($nuc[0] eq "G" && $nuc[1] eq "T" && $nuc[1] eq "A" ){ $iupac_nuc = "D"}
+		elsif ($nuc[0] eq "T" && $nuc[1] eq "A" && $nuc[1] eq "G" ){ $iupac_nuc = "D"}
+		elsif ($nuc[0] eq "T" && $nuc[1] eq "G" && $nuc[1] eq "A" ){ $iupac_nuc = "D"}
 
 		# if A or C or T --> H
-		elsif ($nuc[0] eq "A" && $nuc[1] eq "C" && $nuc[1] eq "T" ){ return "H"}
-		elsif ($nuc[0] eq "A" && $nuc[1] eq "T" && $nuc[1] eq "C" ){ return "H"}
-		elsif ($nuc[0] eq "C" && $nuc[1] eq "A" && $nuc[1] eq "T" ){ return "H"}
-		elsif ($nuc[0] eq "C" && $nuc[1] eq "T" && $nuc[1] eq "A" ){ return "H"}
-		elsif ($nuc[0] eq "T" && $nuc[1] eq "A" && $nuc[1] eq "C" ){ return "H"}
-		elsif ($nuc[0] eq "T" && $nuc[1] eq "C" && $nuc[1] eq "A" ){ return "H"}
+		elsif ($nuc[0] eq "A" && $nuc[1] eq "C" && $nuc[1] eq "T" ){ $iupac_nuc = "H"}
+		elsif ($nuc[0] eq "A" && $nuc[1] eq "T" && $nuc[1] eq "C" ){ $iupac_nuc = "H"}
+		elsif ($nuc[0] eq "C" && $nuc[1] eq "A" && $nuc[1] eq "T" ){ $iupac_nuc = "H"}
+		elsif ($nuc[0] eq "C" && $nuc[1] eq "T" && $nuc[1] eq "A" ){ $iupac_nuc = "H"}
+		elsif ($nuc[0] eq "T" && $nuc[1] eq "A" && $nuc[1] eq "C" ){ $iupac_nuc = "H"}
+		elsif ($nuc[0] eq "T" && $nuc[1] eq "C" && $nuc[1] eq "A" ){ $iupac_nuc = "H"}
 
 		# if A or C or G --> V
-		elsif ($nuc[0] eq "A" && $nuc[1] eq "C" && $nuc[1] eq "G" ){ return "V"}
-		elsif ($nuc[0] eq "A" && $nuc[1] eq "G" && $nuc[1] eq "C" ){ return "V"}
-		elsif ($nuc[0] eq "C" && $nuc[1] eq "A" && $nuc[1] eq "G" ){ return "V"}
-		elsif ($nuc[0] eq "C" && $nuc[1] eq "G" && $nuc[1] eq "A" ){ return "V"}
-		elsif ($nuc[0] eq "G" && $nuc[1] eq "A" && $nuc[1] eq "C" ){ return "V"}
-		elsif ($nuc[0] eq "G" && $nuc[1] eq "C" && $nuc[1] eq "A" ){ return "V"}
+		elsif ($nuc[0] eq "A" && $nuc[1] eq "C" && $nuc[1] eq "G" ){ $iupac_nuc = "V"}
+		elsif ($nuc[0] eq "A" && $nuc[1] eq "G" && $nuc[1] eq "C" ){ $iupac_nuc = "V"}
+		elsif ($nuc[0] eq "C" && $nuc[1] eq "A" && $nuc[1] eq "G" ){ $iupac_nuc = "V"}
+		elsif ($nuc[0] eq "C" && $nuc[1] eq "G" && $nuc[1] eq "A" ){ $iupac_nuc = "V"}
+		elsif ($nuc[0] eq "G" && $nuc[1] eq "A" && $nuc[1] eq "C" ){ $iupac_nuc = "V"}
+		elsif ($nuc[0] eq "G" && $nuc[1] eq "C" && $nuc[1] eq "A" ){ $iupac_nuc = "V"}
 
 		# else --> N
-		elsif ($nuc[0] eq "N" || $nuc[1] eq "N" || $nuc[1] eq "N" ){ return "N"}
+		elsif ($nuc[0] eq "N" || $nuc[1] eq "N" || $nuc[1] eq "N" ){ $iupac_nuc = "N"}
 
 		else { print STDERR "Problem with iupac_nuc subroutine : nucleotide is not A, C, G, T or N\n"}
 
 	} else {
 		print STDERR "Poblem with iupac_nuc subroutine\n"
 	}
+
+	if ($asterisk == 1){
+		$iupac_nuc = lc $iupac_nuc;
+	}
+
+	return $iupac_nuc;
 
 }
 
@@ -239,7 +269,7 @@ open( my $FH_pileup_out, '>>', $outfile ) or die "Could not open file '$outfile'
 
 if ( open( my $FH_pileup_in, '<', $pileup ) ) {
 
-	if ( $verbose ){ print STDERR "\n\t[VERBOSE] ---> Process each position\n"; }
+	if ( $verbose ){ print STDERR "\t[VERBOSE] ---> Process each position\n"; }
 
 	# Process each line
 	while ( my $line = <$FH_pileup_in> ) {
@@ -281,7 +311,9 @@ if ( open( my $FH_pileup_in, '<', $pileup ) ) {
 
 			my %hash_count;
 			my @insertions;
+			my @corrected_insertions;
 			my @deletions;
+			my @corrected_deletions;
 			my $indel_count = 0;
 
 			# Remove symbol which marks the start of a read (and mapping quality following the symbol)
@@ -296,10 +328,6 @@ if ( open( my $FH_pileup_in, '<', $pileup ) ) {
 				# print STDERR "Read bases at position ".$pos.": ".$bases."\n";
 			}
 
-
-			# TODO : what do we do with asteriks ?
-
-
 			# Insertion(s)
 			if( $bases =~ m/\+[0-9]+[ACGTNacgtn]+/ ){
 
@@ -309,13 +337,15 @@ if ( open( my $FH_pileup_in, '<', $pileup ) ) {
 				# Process each insertion
 				foreach my $insertion ( @insertions ){
 
+					#TODO: output colonne supplémentaire avec toutes les insertions séparée par des ;
+
 					# Get its length and sequence
-					my ( $length, $seq ) = ($insertion =~ m/([0-9]+)([ACGTNacgtn]+)/);
+					my ( $length, $seq ) = ( $insertion =~ m/([0-9]+)([ACGTNacgtn]+)/ );
 					# Problem with this pattern when mismatches are presents after a insertion in the 'read bases' field
 					# --> wrong sequence = too long
 
 					# If mismatch(es) after insertion == insertion sequence too long
-					if( $length ne length( $seq ) ){
+					if( $length != length( $seq ) ){
 
 						# Get the real insertion sequence based on length
 						my $newseq = substr( $seq, 0, $length );
@@ -324,11 +354,15 @@ if ( open( my $FH_pileup_in, '<', $pileup ) ) {
 						$bases =~ s/\+$length$newseq//;
 						# print STDERR "Read bases at position ".$pos.": ".$bases."\n";
 
+						push @corrected_insertions, $newseq;
+
 					} else { # If insertion sequence is correct
 
 						# Remove the insertion in the 'read bases' field
 						$bases =~ s/\+$length$seq//;
 						# print STDERR "Read bases at position ".$pos.": ".$bases."\n";
+
+						push @corrected_insertions, $seq;
 
 					}
 
@@ -343,7 +377,7 @@ if ( open( my $FH_pileup_in, '<', $pileup ) ) {
 				@deletions = ($bases =~ m/\-([0-9]+[ACGTNacgtn]+)/g);
 
 				# Process each deletion
-				foreach my $deletion (@deletions){
+				foreach my $deletion ( @deletions ){
 
 					# Get its length and sequence
 					my ( $length, $seq ) = ( $deletion =~ m/([0-9]+)([ACGTNacgtn]+)/ );
@@ -351,7 +385,7 @@ if ( open( my $FH_pileup_in, '<', $pileup ) ) {
 					# --> wrong sequence = too long
 
 					# If mismatch(es) after deletion == deletion sequence too long
-					if( $length ne length( $seq ) ){
+					if( $length != length( $seq ) ){
 
 						# Get the real insertion sequence based on length
 						my $newseq = substr( $seq, 0, $length );
@@ -360,11 +394,15 @@ if ( open( my $FH_pileup_in, '<', $pileup ) ) {
 						$bases =~ s/\-$length$newseq//;
 						# print STDERR "Read bases at position ".$pos.": ".$bases."\n";
 
+						push @corrected_deletions, $newseq;
+
 					} else { # If deletion sequence is correct
 
 						# Remove the deletion in the 'read bases' field
 						$bases =~ s/\-$length$seq//;
 						# print STDERR "Read bases at position ".$pos.": ".$bases."\n";
+
+						push @corrected_deletions, $seq;
 
 					}
 
@@ -373,9 +411,6 @@ if ( open( my $FH_pileup_in, '<', $pileup ) ) {
 			}
 
 			# print STDERR "Read bases at position ".$pos.": ".$bases."\n";
-
-			# Count INDELS
-			$indel_count = ( @insertions+@deletions );
 
 			# Count MATCHES
 			my $dot_number   = ($bases =~ tr/.//);
@@ -391,6 +426,9 @@ if ( open( my $FH_pileup_in, '<', $pileup ) ) {
 			# Count DELETED bases
 			my $asterik_count = ($bases =~ tr/*//);
 
+			# Count INDELS
+			$indel_count = ( @insertions + $asterik_count );
+
 			# print STDERR "A : ".$A_number."\n";
 			# print STDERR "C : ".$C_number."\n";
 			# print STDERR "G : ".$G_number."\n";
@@ -403,15 +441,15 @@ if ( open( my $FH_pileup_in, '<', $pileup ) ) {
 			$hash_count{"G"} = $G_number;
 			$hash_count{"T"} = $T_number;
 			$hash_count{"N"} = $N_number;
-			# $hash_count{"*"} = $asterik_count;
+			$hash_count{"*"} = $asterik_count;
 
 			# Store MATCHES count in hash_count
 			$hash_count{$ref_nuc} = $hash_count{$ref_nuc} + $dot_number;
 			$hash_count{complement($ref_nuc)} = $hash_count{complement($ref_nuc)} + $comma_number;
 
-			my $total = ( $hash_count{"A"} + $hash_count{"C"} + $hash_count{"G"} + $hash_count{"T"} + $hash_count{"N"} + $asterik_count );
+			my $total = ( $hash_count{"A"} + $hash_count{"C"} + $hash_count{"G"} + $hash_count{"T"} + $hash_count{"N"} + $hash_count{"*"} );
 
-			if ( $total != $cov){
+			if ( $total != $cov ){
 				print STDERR "Problem ! Number of read bases is different than coverage at position ".$pos."(".$total." vs. ".$cov.")\n";
 				print STDERR $column[4]."\n";
 				print STDERR $bases."\n\n";
@@ -422,7 +460,9 @@ if ( open( my $FH_pileup_in, '<', $pileup ) ) {
 
 			my @nuc_threshold;
 
-			foreach my $nuc (keys %hash_count){
+			#TODO: gerer cas avec uniquement *
+
+			foreach my $nuc ( keys %hash_count ){
 				if( $hash_count{$nuc} > $threshold) {
 					push @nuc_threshold, $nuc;
 				}
@@ -433,10 +473,10 @@ if ( open( my $FH_pileup_in, '<', $pileup ) ) {
 			my $iupac_nuc;
 
 			# calcul IUPAC nucleotide based on base count
-			if (@nuc_threshold gt 0){
-				$iupac_nuc = iupac_nuc(@nuc_threshold);
+			if ( @nuc_threshold > 0 ){
+				$iupac_nuc = iupac_nuc( @nuc_threshold );
 			} else {
-				$iupac_nuc = 'NA';
+				$iupac_nuc = 'N';
 			}
 
 			# Output :
@@ -449,16 +489,26 @@ if ( open( my $FH_pileup_in, '<', $pileup ) ) {
 				# nb_de_indel
 				# nucleotide_format_IUPAC
 
-			if ( $indel_count > $threshold ){
+			if ( $indel_count >= $threshold ){
 				$iupac_nuc = lc $iupac_nuc;
 			}
 
-			print $FH_pileup_out $seqid."\t".$pos."\t".$hash_count{"A"}."\t".$hash_count{"C"}."\t".$hash_count{"G"}."\t".$hash_count{"T"}."\t".$indel_count."\t".$iupac_nuc."\n";
+			if (@corrected_insertions == 0){
+
+				print $FH_pileup_out $seqid."\t".$pos."\t".$hash_count{"A"}."\t".$hash_count{"C"}."\t".$hash_count{"G"}."\t".$hash_count{"T"}."\t".$indel_count."\t".$iupac_nuc."\n";
+
+			} else {
+
+				my $insertions = join( ";", @corrected_insertions );
+
+				print $FH_pileup_out $seqid."\t".$pos."\t".$hash_count{"A"}."\t".$hash_count{"C"}."\t".$hash_count{"G"}."\t".$hash_count{"T"}."\t".$indel_count."\t".$iupac_nuc."\t".$insertions."\n";
+
+			}
 
 			# print STDERR "\n";
 
 		} else { # Cov = 0
-			print $FH_pileup_out $seqid."\t".$pos."\t0\t0\t0\t0\t0\tNA\tcov0\n";
+			print $FH_pileup_out $seqid."\t".$pos."\t0\t0\t0\t0\t0\tN\tcov0\n";
 		}
 
 	}
