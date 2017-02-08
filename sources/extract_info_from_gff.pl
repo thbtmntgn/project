@@ -43,7 +43,7 @@ Help:
 Description:
 
 	Extract information from a GFF file.
-	Only 'gene' and 'exon' features are handled.
+	Only 'gene', 'exon' and 'CDS' features are handled.
 	The following informations are extracted :
 	- chromosome/sequence ID
  	- strand orientation
