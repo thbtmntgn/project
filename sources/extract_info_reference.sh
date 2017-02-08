@@ -26,11 +26,12 @@ Help :"
 
 Description:
 
-	This scripts needs 2 input files:
-	- a FASTA file
-	- a GFF file
+	This scripts needs:
+	- a reference FASTA file
+	- a reference GFF file
 
-	TO BE COMPLETE!
+	It performs extract_info_from_fasta.pl and calculated_fields.pl script.
+
 EOF
 
 	exit ${1:-0}
