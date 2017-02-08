@@ -7,7 +7,7 @@ set -u
 
 function USAGE() {
 
-	printf "Usage:\n\t%s -f FASTA -g GFF -d DB_NAME [-o DIRECTORY] [-m LENGTH] [-p PREFIX] [-c] [-v]\n" $( basename ${0} )
+	printf "Usage:\n\t%s -f FASTA -g GFF [-o DIRECTORY] [-m LENGTH] [-p PREFIX] [-c] [-v]\n" $( basename ${0} )
 	printf "\t%s -h\n\n" $( basename ${0} )
 
 	cat <<EOF
@@ -15,7 +15,6 @@ function USAGE() {
 Required arguments :
 	-f : FASTA file
 	-g : GFF file
-	-d : database name
 
 Optional arguments:
 	-c : if files are compressed (gzip)                     [by default: not compressed]
@@ -29,7 +28,9 @@ Help :"
 
 Description:
 
-	TO BE COMPLETED!
+	This script needs 2 input files:
+	- a FASTA file
+	- a GFF file
 EOF
 
 	exit ${1:-0}
