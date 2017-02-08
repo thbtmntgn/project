@@ -26,8 +26,12 @@ Help:
 
 Description:
 
-	TO BE COMPLETED!
+	This script needs:
+	- a file containing extracted information from a fasta file,
+	- a file containing extracted information from a gff file,
+	- a database name
 
+	It inserts information within the 2 predefined table in the given database.
 EOF
 
 	exit ${1:-0}
