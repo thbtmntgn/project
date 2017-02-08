@@ -43,7 +43,17 @@ Help:
 
 Description:
 
-	TO BE COMPLETED!
+	This script needs 2 input files :
+	- the extracted information from FASTA file
+	- the extracted information from CDS from GFF file
+
+	For each position in FASTA file it calculates the following missing fields :
+	- the complement nucleotide (on strand -)
+	- the codon containing the processed position on strand +
+	- the codon containing the processed position on strand -
+	- the corresponding amino-acid on strand +
+	- the corresponding amino-acid on strand -
+
 EOF
 
 	exit;
