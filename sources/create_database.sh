@@ -24,7 +24,7 @@ Help :
 
 Description:
 
-	TO BE COMPLETED!
+	This script needs a name to create a MySQL database.
 EOF
 
 	exit ${1:-0}
