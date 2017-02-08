@@ -41,7 +41,7 @@ Help:
 
 Description:
 
-	Extract information from a GFF FASTA.
+	Extract information from a FASTA file.
 EOF
 
 	exit;
