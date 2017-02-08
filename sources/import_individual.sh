@@ -7,7 +7,7 @@ set -u
 
 function USAGE() {
 
-	printf "Usage:\n\t%s -d DATABASE -f FASTA -g GFF [-o OUTDIR] [-v]\n" $( basename ${0} )
+	printf "Usage:\n\t%s -d DATABASE -p PILEUP_INFO -t TABLE_NAME [-o OUTDIR] [-v]\n" $( basename ${0} )
 	printf "\t%s [-h]\n\n" $( basename ${0} )
 
 	cat <<EOF
@@ -26,7 +26,12 @@ Help :
 
 Description:
 
-	TO BE COMPLETED!
+	This script needs:
+	- a file containing extracted information from a pileup file,
+	- a database name
+	- a table name
+
+	It inserts information within the given table of the given database.
 EOF
 
 	exit ${1:-0}
