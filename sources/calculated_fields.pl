@@ -382,7 +382,7 @@ foreach my $seqid ( keys %{ $href_pos } ) {
 		my $aa_minus    = amino_acid($codon_minus);
 
 		# Print line in output file
-		print $FH_pos $seqid."\t".$pos."\t".$nuc_plus."\t".$codon_plus."\t".$aa_plus."\t".$nuc_plus."\t".$codon_minus."\t".$aa_minus."\n";
+		print $FH_pos $seqid."\t".$pos."\t".$nuc_plus."\t".$codon_plus."\t".$aa_plus."\t".$nuc_minus."\t".$codon_minus."\t".$aa_minus."\n";
 
 	}
 }
